@@ -84,6 +84,9 @@ void OutputDevice::setDebug(bool debug)
 
 void OutputDevice::handleEvent(int type, int code, int value)
 {
+  if(_uinput.getStatus() != QUinput::READY)
+    recreateDevice();
+
   if(_debug) qDebug() << _name << "sending event" << type << code << value;
   _uinput.event(static_cast<QUinput::EventType>(type), code, value);
   _uinput.sync();
@@ -103,16 +106,15 @@ void OutputDevice::recreateDevice()
       _uinput.add(type);
     }
     _uinput.add(type, output->getCode());
-    disconnect(output, 0, this, 0);
-    connect(output, SIGNAL(event(int,int,int)), this, SLOT(handleEvent(int,int,int)));
   }
   _uinput.create();
 }
+
 void OutputDevice::outputAppend(QQmlListProperty<OutputEvent>* prop, OutputEvent* output)
 {
   static_cast<QList<OutputEvent*>*>(prop->data)->append(output);
-  //OutputDevice* device = qobject_cast<OutputDevice*>(prop->object);
-  //device->recreateDevice();
+  OutputDevice* device = qobject_cast<OutputDevice*>(prop->object);
+  connect(output, SIGNAL(event(int,int,int)), device, SLOT(handleEvent(int,int,int)));
 }
 OutputEvent* OutputDevice::outputAt(QQmlListProperty<OutputEvent>* prop, int index)
 {
@@ -120,9 +122,12 @@ OutputEvent* OutputDevice::outputAt(QQmlListProperty<OutputEvent>* prop, int ind
 }
 void OutputDevice::outputClear(QQmlListProperty<OutputEvent>* prop)
 {
+  OutputDevice* device = qobject_cast<OutputDevice*>(prop->object);
+  foreach (OutputEvent const* output, device->_outputs) {
+    disconnect(output, 0, device, 0);
+  }
   static_cast<QList<OutputEvent*>*>(prop->data)->clear();
-  //OutputDevice* device = qobject_cast<OutputDevice*>(prop->object);
-  //device->recreateDevice();
+  device->recreateDevice();
 }
 int OutputDevice::outputCount(QQmlListProperty<OutputEvent>* prop)
 {

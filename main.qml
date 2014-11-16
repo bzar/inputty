@@ -102,7 +102,6 @@ ApplicationWindow {
         id: nub0_y
         code: Codes.get("ABS_Y")
       }
-      Component.onCompleted: recreateDevice()
     }
 
     OutputDevice {
@@ -120,7 +119,6 @@ ApplicationWindow {
         id: nub1_y
         code: Codes.get("ABS_Y")
       }
-      Component.onCompleted: recreateDevice()
     }
     OutputDevice {
       id: pandora
@@ -193,8 +191,6 @@ ApplicationWindow {
         id: pandora_hold
         code: Codes.get("KEY_COFFEE")
       }
-
-      Component.onCompleted: recreateDevice()
     }
 
     ListView {
