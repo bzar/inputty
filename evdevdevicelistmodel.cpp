@@ -1,4 +1,5 @@
 #include "evdevdevicelistmodel.h"
+#include <QDebug>
 #include <QDir>
 #include <fcntl.h>
 #include <unistd.h>
@@ -38,6 +39,15 @@ QVariant EvdevDeviceListModel::data(const QModelIndex& index, int role) const
   }
 }
 
+QVariant EvdevDeviceListModel::get(int index)
+{
+  QHash<int, QByteArray> roles = roleNames();
+  QMap<QString, QVariant> object;
+  object[roles[NameRole]] = _devices.at(index).name;
+  object[roles[PathRole]] = _devices.at(index).path;
+  return QVariant::fromValue(object);
+}
+
 void EvdevDeviceListModel::update()
 {
   beginResetModel();
@@ -62,4 +72,5 @@ void EvdevDeviceListModel::update()
   }
 
   endResetModel();
+  emit lengthChanged(_devices.length());
 }

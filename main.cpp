@@ -8,9 +8,17 @@
 #include "inputdevice.h"
 #include "outputdevice.h"
 
+#include <iostream>
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    if(argc < 2)
+    {
+      std::cout << "Usage: " << argv[0] << "<inputty qml file>" << std::endl;
+      return 1;
+    }
 
     // @uri fi.bzar.qmlcomponents
     qmlRegisterType<EvdevDeviceListModel>("EvdevDeviceListModel", 1, 0, "EvdevDeviceListModel");
@@ -28,7 +36,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<RelOutputEvent>("IODevices", 1, 0, "ORel");
     qmlRegisterType<AbsOutputEvent>("IODevices", 1, 0, "OAbs");
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(argv[1]));
 
 
     return app.exec();

@@ -7,6 +7,7 @@
 class EvdevDeviceListModel : public QAbstractListModel
 {
   Q_OBJECT
+  Q_PROPERTY(int length READ rowCount NOTIFY lengthChanged)
 public:
   explicit EvdevDeviceListModel(QObject *parent = 0);
   enum EvdevDeviceRoles {
@@ -16,8 +17,10 @@ public:
   QHash<int, QByteArray> roleNames() const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role) const;
+  Q_INVOKABLE QVariant get(int index);
 
 signals:
+  void lengthChanged(int);
 
 public slots:
 

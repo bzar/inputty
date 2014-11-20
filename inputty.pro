@@ -1,6 +1,7 @@
 TEMPLATE = app
 
 QT += qml quick widgets
+CONFIG += C++11
 
 SOURCES += main.cpp \
     quinput.cpp \
@@ -31,3 +32,7 @@ HEADERS += \
     inputevent.h \
     outputdevice.h \
     outputevent.h
+
+OTHER_FILES += \
+    gamepad_to_pandora.qml \
+    wiimotes.qml

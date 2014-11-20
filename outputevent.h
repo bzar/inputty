@@ -19,7 +19,7 @@ signals:
   void codeChanged(bool code);
   void event(int type, int code, int value);
 private:
-  int _code;
+  int _code = 0;
 };
 
 class KeyOutputEvent : public OutputEvent
@@ -33,7 +33,7 @@ public:
 signals:
   void pressedChanged(bool pressed);
 private:
-  bool _pressed;
+  bool _pressed = false;
 };
 
 class RelOutputEvent : public OutputEvent
@@ -47,7 +47,7 @@ public:
 signals:
   void valueChanged(int value);
 private:
-  int _value;
+  int _value = 0;
 };
 class AbsOutputEvent : public OutputEvent
 {
@@ -60,6 +60,6 @@ public:
 signals:
   void valueChanged(int value);
 private:
-  int _value;
+  int _value = 0;
 };
 #endif // OUTPUTEVENT_H

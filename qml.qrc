@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
         <file>inputcodes.js</file>
+        <file>collections.js</file>
     </qresource>
 </RCC>

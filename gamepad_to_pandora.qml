@@ -13,6 +13,7 @@ ApplicationWindow {
     InputDevice {
       id: gamepad
       path: devices.currentItem.devicePath
+      debug: true
       IKey {
         code: Codes.get("BTN_DPAD_UP")
         onPressedChanged: pandora_up.pressed = pressed

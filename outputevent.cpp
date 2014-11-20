@@ -1,7 +1,7 @@
 #include "outputevent.h"
 
 OutputEvent::OutputEvent(QObject *parent) :
-  QObject(parent)
+  QObject(parent), _code(0)
 {
 }
 
@@ -47,8 +47,8 @@ void KeyOutputEvent::setPressed(bool pressed)
   {
     _pressed = pressed;
     emit pressedChanged(_pressed);
+    emit event(getType(), getCode(), pressed ? 1 : 0);
   }
-  emit event(getType(), getCode(), pressed ? 1 : 0);
 }
 
 
@@ -68,8 +68,8 @@ void RelOutputEvent::setValue(int value)
   {
     _value = value;
     emit valueChanged(_value);
+    emit event(getType(), getCode(), _value);
   }
-  emit event(getType(), getCode(), _value);
 }
 
 QUinput::EventType AbsOutputEvent::getType() const
@@ -88,6 +88,6 @@ void AbsOutputEvent::setValue(int value)
   {
     _value = value;
     emit valueChanged(_value);
+    emit event(getType(), getCode(), _value);
   }
-  emit event(getType(), getCode(), _value);
 }
