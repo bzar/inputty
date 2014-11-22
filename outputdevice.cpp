@@ -2,13 +2,13 @@
 #include <QSet>
 #include <QDebug>
 
-namespace
-{
-}
-
 OutputDevice::OutputDevice(QObject *parent) :
-  QObject(parent), _uinput(), _name(), _product(0), _vendor(0), _version(0), _outputs(), _debug(false)
+  QObject(parent), _uinput(), _name(), _product(0), _vendor(0), _version(0), _outputs(), _debug(false), _graceTimer()
 {
+  _graceTimer.setInterval(10);
+  _graceTimer.setSingleShot(true);
+  _graceTimer.setTimerType(Qt::PreciseTimer);
+  connect(&_graceTimer, SIGNAL(timeout()), this, SLOT(recreateDevice()));
 }
 
 QQmlListProperty<OutputEvent> OutputDevice::outputs()
@@ -85,7 +85,7 @@ void OutputDevice::setDebug(bool debug)
 void OutputDevice::handleEvent(int type, int code, int value)
 {
   if(_uinput.getStatus() != QUinput::READY)
-    recreateDevice();
+    return;
 
   if(_debug) qDebug() << _name << "sending event" << type << code << value;
   _uinput.event(static_cast<QUinput::EventType>(type), code, value);
@@ -115,6 +115,8 @@ void OutputDevice::outputAppend(QQmlListProperty<OutputEvent>* prop, OutputEvent
   static_cast<QList<OutputEvent*>*>(prop->data)->append(output);
   OutputDevice* device = qobject_cast<OutputDevice*>(prop->object);
   connect(output, SIGNAL(event(int,int,int)), device, SLOT(handleEvent(int,int,int)));
+  connect(output, SIGNAL(codeChanged(int)), &device->_graceTimer, SLOT(start()));
+  device->_graceTimer.start();
 }
 OutputEvent* OutputDevice::outputAt(QQmlListProperty<OutputEvent>* prop, int index)
 {
@@ -127,7 +129,7 @@ void OutputDevice::outputClear(QQmlListProperty<OutputEvent>* prop)
     disconnect(output, 0, device, 0);
   }
   static_cast<QList<OutputEvent*>*>(prop->data)->clear();
-  device->recreateDevice();
+  device->_graceTimer.start();
 }
 int OutputDevice::outputCount(QQmlListProperty<OutputEvent>* prop)
 {

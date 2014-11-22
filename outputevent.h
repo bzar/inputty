@@ -16,7 +16,7 @@ public:
   int getCode() const;
   void setCode(int code);
 signals:
-  void codeChanged(bool code);
+  void codeChanged(int code);
   void event(int type, int code, int value);
 private:
   int _code = 0;

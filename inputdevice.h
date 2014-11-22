@@ -9,6 +9,7 @@
 class InputDevice : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(InputDevice)
   Q_PROPERTY(QQmlListProperty<InputEvent> inputs READ inputs)
   Q_PROPERTY(QString path READ getPath WRITE setPath)
   Q_PROPERTY(bool debug READ getDebug WRITE setDebug)

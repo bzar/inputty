@@ -5,10 +5,12 @@
 #include "quinput.h"
 #include "outputevent.h"
 #include <QQmlListProperty>
+#include <QTimer>
 
 class OutputDevice : public QObject
 {
   Q_OBJECT
+  Q_DISABLE_COPY(OutputDevice)
   Q_PROPERTY(QQmlListProperty<OutputEvent> outputs READ outputs)
   Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
   Q_PROPERTY(int product READ getProduct WRITE setProduct NOTIFY productChanged)
@@ -56,6 +58,7 @@ private:
   int _version;
   QList<OutputEvent*> _outputs;
   bool _debug;
+  QTimer _graceTimer;
 
   static void outputAppend(QQmlListProperty<OutputEvent>* prop, OutputEvent* output);
   static OutputEvent* outputAt(QQmlListProperty<OutputEvent>* prop, int index);
