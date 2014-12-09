@@ -2,7 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import EvdevDeviceListModel 1.0
 import IODevices 1.0
-import "inputcodes.js" as Codes
+import "qrc:/inputcodes.js" as Codes
 
 ApplicationWindow {
     visible: true

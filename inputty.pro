@@ -35,4 +35,5 @@ HEADERS += \
 
 OTHER_FILES += \
     gamepad_to_pandora.qml \
-    wiimotes.qml
+    wiimotes.qml \
+    keyboard_fun.qml
