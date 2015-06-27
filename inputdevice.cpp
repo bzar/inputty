@@ -59,3 +59,14 @@ void InputDevice::setDebug(bool debug)
 {
   _debug = debug;
 }
+
+
+bool InputDevice::getGrab() const
+{
+  return _evdev.getGrab();
+}
+
+void InputDevice::setGrab(bool grab)
+{
+  _evdev.setGrab(grab);
+}

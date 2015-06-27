@@ -5,13 +5,13 @@
 #include <QDebug>
 
 QEvdev::QEvdev(QObject* parent) :
-  QObject(parent), listener(0)
+  QObject(parent), listener(0), grab(false)
 {
 
 }
 
 QEvdev::QEvdev(QString path, QObject *parent) :
-  QObject(parent), listener(0)
+  QObject(parent), listener(0), grab(false)
 {
   setPath(path);
 }
@@ -41,6 +41,7 @@ void QEvdev::setPath(QString path)
     connect(listener, SIGNAL(evdevEvent(quint16,quint16,qint32)), this, SLOT(onListenerEvent(quint16,quint16,qint32)), Qt::QueuedConnection);
     connect(listener, SIGNAL(evdevEvent(quint16,quint16,qint32)), this, SIGNAL(rawEvent(quint16,quint16,qint32)));
     listener->start();
+    listener->setGrab(grab);
   }
 }
 
@@ -67,6 +68,25 @@ void QEvdev::onListenerEvent(quint16 type, quint16 code, qint32 value)
   }
 }
 
+
+bool QEvdev::getGrab() const
+{
+  return listener && listener->getGrab();
+}
+
+void QEvdev::setGrab(bool value)
+{
+  qDebug() << "setgrab" << grab;
+  if(listener)
+  {
+    listener->setGrab(value);
+    grab = listener->getGrab();
+  }
+  else
+  {
+    grab = value;
+  }
+}
 
 qevdev::Listener::Listener(QString path, QObject* parent) : QThread(parent), fd(-1), shouldStop(false)
 {
@@ -113,4 +133,28 @@ void qevdev::Listener::run()
 void qevdev::Listener::stop()
 {
   shouldStop = true;
+}
+
+bool qevdev::Listener::getGrab() const
+{
+  return grab;
+}
+
+void qevdev::Listener::setGrab(bool value)
+{
+  if(grab && !value)
+  {
+    qDebug() << "Disabling grabbing";
+    if(ioctl(fd, EVIOCGRAB, 0) < 0)
+      return;
+    qDebug() << "Success";
+  }
+  else if(!grab && value)
+  {
+    qDebug() << "Enabling grabbing";
+    if(ioctl(fd, EVIOCGRAB, 1) < 0)
+      return;
+    qDebug() << "Success";
+  }
+  grab = value;
 }

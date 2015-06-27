@@ -13,6 +13,7 @@ class InputDevice : public QObject
   Q_PROPERTY(QQmlListProperty<InputEvent> inputs READ inputs)
   Q_PROPERTY(QString path READ getPath WRITE setPath)
   Q_PROPERTY(bool debug READ getDebug WRITE setDebug)
+  Q_PROPERTY(bool grab READ getGrab WRITE setGrab)
   Q_CLASSINFO("DefaultProperty", "inputs")
 public:
   explicit InputDevice(QObject *parent = 0);
@@ -24,6 +25,8 @@ public:
   bool getDebug() const;
   void setDebug(bool debug);
 
+  bool getGrab() const;
+  void setGrab(bool grab);
 signals:
 
 public slots:

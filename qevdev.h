@@ -13,6 +13,8 @@ namespace qevdev
     explicit Listener(QString path, QObject *parent = 0);
     ~Listener();
     void run();
+    bool getGrab() const;
+    void setGrab(bool grab);
 
   public slots:
     void stop();
@@ -21,6 +23,7 @@ namespace qevdev
   private:
     int fd;
     bool shouldStop;
+    bool grab;
   };
 }
 
@@ -28,6 +31,7 @@ class QEvdev : public QObject
 {
   Q_OBJECT
   Q_PROPERTY(QString path READ getPath WRITE setPath)
+  Q_PROPERTY(bool grab READ getGrab WRITE setGrab)
 public:
   explicit QEvdev(QObject *parent = 0);
   explicit QEvdev(QString path, QObject *parent = 0);
@@ -43,6 +47,8 @@ public slots:
   void setPath(QString path);
   QString getPath() const;
 
+  bool getGrab() const;
+  void setGrab(bool grab);
 
 private slots:
   void onListenerEvent(quint16 type, quint16 code, qint32 value);
@@ -51,6 +57,7 @@ private slots:
 private:
   QString path;
   qevdev::Listener* listener;
+  bool grab;
 };
 
 #endif // QEVDEV_H
