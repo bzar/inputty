@@ -35,6 +35,14 @@ signals:
 private:
   bool _pressed = false;
 };
+class AnyKeyOutputEvent : public OutputEvent
+{
+  Q_OBJECT
+public:
+  QUinput::EventType getType() const;
+public slots:
+  void event(int code, bool value);
+};
 
 class RelOutputEvent : public OutputEvent
 {

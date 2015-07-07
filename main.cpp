@@ -27,12 +27,14 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<InputEvent>();
     qmlRegisterType<KeyInputEvent>("IODevices", 1, 0, "IKey");
+    qmlRegisterType<AnyKeyInputEvent>("IODevices", 1, 0, "IAnyKey");
     qmlRegisterType<RelInputEvent>("IODevices", 1, 0, "IRel");
     qmlRegisterType<AbsInputEvent>("IODevices", 1, 0, "IAbs");
 
     qmlRegisterType<OutputDevice>("IODevices", 1, 0, "OutputDevice");
     qmlRegisterType<OutputEvent>();
     qmlRegisterType<KeyOutputEvent>("IODevices", 1, 0, "OKey");
+    qmlRegisterType<AnyKeyOutputEvent>("IODevices", 1, 0, "OAnyKey");
     qmlRegisterType<RelOutputEvent>("IODevices", 1, 0, "ORel");
     qmlRegisterType<AbsOutputEvent>("IODevices", 1, 0, "OAbs");
     QQmlApplicationEngine engine;

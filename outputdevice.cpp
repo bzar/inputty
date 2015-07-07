@@ -3,7 +3,7 @@
 #include <QDebug>
 
 OutputDevice::OutputDevice(QObject *parent) :
-  QObject(parent), _uinput(), _name(), _product(0), _vendor(0), _version(0), _outputs(), _debug(false), _graceTimer()
+  QObject(parent), _uinput(), _name(), _product(0), _vendor(0), _version(0), _outputs(), _codes(), _debug(false), _graceTimer()
 {
   _graceTimer.setInterval(10);
   _graceTimer.setSingleShot(true);
@@ -14,6 +14,21 @@ OutputDevice::OutputDevice(QObject *parent) :
 QQmlListProperty<OutputEvent> OutputDevice::outputs()
 {
   return QQmlListProperty<OutputEvent>(this, &_outputs, outputAppend, outputCount, outputAt, outputClear);
+}
+
+QList<int> OutputDevice::getCodes() const
+{
+  return _codes;
+}
+
+void OutputDevice::setCodes(QList<int> codes)
+{
+  if(codes != _codes)
+  {
+    _codes = codes;
+    emit codesChanged(_codes);
+    _graceTimer.start();
+  }
 }
 
 QString OutputDevice::getName() const
@@ -90,7 +105,6 @@ void OutputDevice::handleEvent(int type, int code, int value)
   if(_debug) qDebug() << _name << "sending event" << type << code << value;
   _uinput.event(static_cast<QUinput::EventType>(type), code, value);
   _uinput.sync();
-
 }
 void OutputDevice::recreateDevice()
 {
@@ -106,6 +120,9 @@ void OutputDevice::recreateDevice()
       _uinput.add(type);
     }
     _uinput.add(type, output->getCode());
+  }
+  foreach (int code, _codes) {
+    _uinput.add(QUinput::KEY, static_cast<QUinput::EventType>(code));
   }
   _uinput.create();
 }

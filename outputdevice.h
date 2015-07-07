@@ -12,6 +12,7 @@ class OutputDevice : public QObject
   Q_OBJECT
   Q_DISABLE_COPY(OutputDevice)
   Q_PROPERTY(QQmlListProperty<OutputEvent> outputs READ outputs)
+  Q_PROPERTY(QList<int> codes READ getCodes WRITE setCodes NOTIFY codesChanged)
   Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
   Q_PROPERTY(int product READ getProduct WRITE setProduct NOTIFY productChanged)
   Q_PROPERTY(int vendor READ getVendor WRITE setVendor NOTIFY vendorChanged)
@@ -22,6 +23,9 @@ class OutputDevice : public QObject
 public:
   explicit OutputDevice(QObject *parent = 0);
   QQmlListProperty<OutputEvent> outputs();
+
+  QList<int> getCodes() const;
+  void setCodes(QList<int> codes);
 
   QString getName() const;
   void setName(QString name);
@@ -43,6 +47,7 @@ signals:
   void productChanged(int value);
   void vendorChanged(int value);
   void versionChanged(int value);
+  void codesChanged(QList<int> codes);
 
 public slots:
   void recreateDevice();
@@ -57,6 +62,7 @@ private:
   int _vendor;
   int _version;
   QList<OutputEvent*> _outputs;
+  QList<int> _codes;
   bool _debug;
   QTimer _graceTimer;
 

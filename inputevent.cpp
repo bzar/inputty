@@ -50,6 +50,13 @@ void KeyInputEvent::setPressed(bool value)
   }
 }
 
+void AnyKeyInputEvent::handleEvent(int type, int code, int value)
+{
+  if(type == EV_KEY)
+  {
+    emit event(code, value);
+  }
+}
 
 
 void RelInputEvent::handleEvent(int type, int code, int value)

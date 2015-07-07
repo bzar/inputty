@@ -32,6 +32,15 @@ private:
   int _code;
   bool _pressed;
 };
+class AnyKeyInputEvent : public InputEvent
+{
+  Q_OBJECT
+public:
+  void handleEvent(int type, int code, int value);
+
+signals:
+  void event(int code, bool value);
+};
 class RelInputEvent : public InputEvent
 {
   Q_OBJECT

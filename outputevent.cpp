@@ -51,6 +51,14 @@ void KeyOutputEvent::setPressed(bool pressed)
   }
 }
 
+QUinput::EventType AnyKeyOutputEvent::getType() const
+{
+  return QUinput::KEY;
+}
+void AnyKeyOutputEvent::event(int code, bool value)
+{
+  emit OutputEvent::event(static_cast<int>(QUinput::KEY), code, value ? 1 : 0);
+}
 
 QUinput::EventType RelOutputEvent::getType() const
 {

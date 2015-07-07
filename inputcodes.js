@@ -1,8 +1,24 @@
 .pragma library
 
-
+function names() {
+  var source = map();
+  var result = [];
+  for(var k in source) {
+    if(source.hasOwnProperty(k)) {
+      result.push(k);
+    }
+  }
+  return result;
+}
 function get(key) {
-  var codes = {
+  return map()[key];
+}
+function keys() {
+  return names().filter(function(k) { return /KEY_.*/.test(k); }).map(get)
+}
+
+function map() {
+  return {
     "KEY_RESERVED": 0,
     "KEY_ESC": 1,
     "KEY_1": 2,
@@ -638,5 +654,4 @@ function get(key) {
     "ABS_MT_TOOL_X": 0x3c,    /* Center X tool position */
     "ABS_MT_TOOL_Y": 0x3d,    /* Center Y tool position */
   }
-  return codes[key];
 }
